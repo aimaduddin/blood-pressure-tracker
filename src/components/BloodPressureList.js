@@ -94,7 +94,28 @@ function BloodPressureList() {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-4 sm:p-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+      <div className="mb-4 flex flex-wrap gap-2">
+        <button 
+          onClick={() => setFilter('all')} 
+          className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+        >
+          All
+        </button>
+        <button 
+          onClick={() => setFilter('mother')} 
+          className={`px-4 py-2 rounded ${filter === 'mother' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+        >
+          Mother
+        </button>
+        <button 
+          onClick={() => setFilter('father')} 
+          className={`px-4 py-2 rounded ${filter === 'father' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+        >
+          Father
+        </button>
+      </div>
+      
+      <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
         <div className="w-full sm:w-auto">
           <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
           <input
@@ -129,28 +150,7 @@ function BloodPressureList() {
         </button>
       </div>
       
-      <div className="mb-4 flex flex-wrap gap-2">
-        <button 
-          onClick={() => setFilter('all')} 
-          className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-        >
-          All
-        </button>
-        <button 
-          onClick={() => setFilter('mother')} 
-          className={`px-4 py-2 rounded ${filter === 'mother' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-        >
-          Mother
-        </button>
-        <button 
-          onClick={() => setFilter('father')} 
-          className={`px-4 py-2 rounded ${filter === 'father' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-        >
-          Father
-        </button>
-      </div>
-      
-      <div className="space-y-4">
+      <div className="space-y-4 mt-4">
         {filteredReadings.map(reading => (
           <BloodPressureItem 
             key={reading.id} 

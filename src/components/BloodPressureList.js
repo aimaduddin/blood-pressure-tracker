@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import BloodPressureItem from './BloodPressureItem';
+import * as XLSX from 'xlsx';
 
 function BloodPressureList() {
   const [readings, setReadings] = useState([]);
@@ -42,6 +43,28 @@ function BloodPressureList() {
     return reading.person === filter;
   });
 
+  const exportToExcel = () => {
+    const dataToExport = filteredReadings.map(reading => {
+      const date = new Date(reading.datetime);
+      return {
+        Date: date.toLocaleDateString(),
+        Time: date.toLocaleTimeString(),
+        'Time of Day': reading.timeOfDay,
+        'BP Reading': `${reading.systolic}/${reading.diastolic}`,
+        Pulse: reading.pulse
+      };
+    });
+
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Blood Pressure Readings");
+
+    // Generate filename based on current filter
+    const filename = `blood_pressure_readings_${filter}.xlsx`;
+
+    XLSX.writeFile(wb, filename);
+  };
+
   if (loading) {
     return <div className="flex justify-center items-center h-64">
       <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-green-500"></div>
@@ -50,7 +73,15 @@ function BloodPressureList() {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Blood Pressure Readings</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold text-gray-800">Blood Pressure Readings</h2>
+        <button 
+          onClick={exportToExcel}
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
+        >
+          Export to Excel
+        </button>
+      </div>
       
       <div className="mb-4 flex space-x-2">
         <button 

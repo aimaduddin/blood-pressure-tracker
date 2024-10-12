@@ -11,6 +11,7 @@ function BloodPressureForm() {
   const [datetime, setDatetime] = useState('');
   const [timeOfDay, setTimeOfDay] = useState('');
   const [loading, setLoading] = useState(false);
+  const [remarks, setRemarks] = useState('');
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -59,6 +60,7 @@ function BloodPressureForm() {
         setPulse(data.pulse);
         setDatetime(new Date(data.datetime).toISOString().slice(0, 16));
         setTimeOfDay(data.timeOfDay || '');
+        setRemarks(data.remarks || '');
       }
     } catch (error) {
       console.error('Error fetching reading:', error);
@@ -76,7 +78,8 @@ function BloodPressureForm() {
       diastolic: Number(diastolic), 
       pulse: Number(pulse), 
       datetime: new Date(datetime).toISOString(),
-      timeOfDay
+      timeOfDay,
+      remarks
     };
     
     try {
@@ -175,6 +178,16 @@ function BloodPressureForm() {
             <option value="Afternoon">Afternoon</option>
             <option value="Night">Night</option>
           </select>
+        </div>
+        <div>
+          <label htmlFor="remarks" className="block text-sm font-medium text-gray-700">Remarks (Optional)</label>
+          <textarea
+            id="remarks"
+            value={remarks}
+            onChange={(e) => setRemarks(e.target.value)}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+            rows="3"
+          />
         </div>
         <div>
           <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">

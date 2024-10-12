@@ -13,6 +13,9 @@ function BloodPressureItem({ reading, onDelete }) {
         <p><span className="font-semibold">Systolic:</span> {reading.systolic}</p>
         <p><span className="font-semibold">Diastolic:</span> {reading.diastolic}</p>
         <p><span className="font-semibold">Pulse:</span> {reading.pulse}</p>
+        {reading.remarks && (
+          <p className="col-span-2"><span className="font-semibold">Remarks:</span> {reading.remarks}</p>
+        )}
       </div>
       <div className="mt-4 flex justify-end space-x-2">
         <Link to={`/edit/${reading.id}`} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300">Edit</Link>

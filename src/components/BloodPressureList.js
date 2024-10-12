@@ -51,7 +51,8 @@ function BloodPressureList() {
         Time: date.toLocaleTimeString(),
         'Time of Day': reading.timeOfDay,
         'BP Reading': `${reading.systolic}/${reading.diastolic}`,
-        Pulse: reading.pulse
+        Pulse: reading.pulse,
+        Remarks: reading.remarks || '' // Include remarks, use empty string if not present
       };
     });
 

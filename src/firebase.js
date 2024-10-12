@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDCMKfMperfmxQdmQZnYYzYp48GmouL9dI",
-    authDomain: "react-bloodpressuretracker.firebaseapp.com",
-    projectId: "react-bloodpressuretracker",
-    storageBucket: "react-bloodpressuretracker.appspot.com",
-    messagingSenderId: "896903679451",
-    appId: "1:896903679451:web:ab23d398bee9b021c2abfe"
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
   };
 
 const app = initializeApp(firebaseConfig);

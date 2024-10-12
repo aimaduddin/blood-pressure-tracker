@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import BloodPressureItem from './BloodPressureItem';
-import Spinner from './Spinner';
 
 function BloodPressureList() {
   const [readings, setReadings] = useState([]);
@@ -29,30 +28,32 @@ function BloodPressureList() {
   };
 
   const handleDelete = async (id) => {
-    setLoading(true);
     try {
       await deleteDoc(doc(db, 'bloodPressureReadings', id));
       await fetchReadings();
     } catch (error) {
       console.error('Error deleting reading:', error);
-      setLoading(false);
     }
   };
 
   if (loading) {
-    return <Spinner />;
+    return <div className="flex justify-center items-center h-64">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-green-500"></div>
+    </div>;
   }
 
   return (
-    <div>
-      <h2>Blood Pressure Readings</h2>
-      {readings.map(reading => (
-        <BloodPressureItem 
-          key={reading.id} 
-          reading={reading} 
-          onDelete={handleDelete} 
-        />
-      ))}
+    <div className="bg-white shadow-md rounded-lg p-6">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">Blood Pressure Readings</h2>
+      <div className="space-y-4">
+        {readings.map(reading => (
+          <BloodPressureItem 
+            key={reading.id} 
+            reading={reading} 
+            onDelete={handleDelete} 
+          />
+        ))}
+      </div>
     </div>
   );
 }

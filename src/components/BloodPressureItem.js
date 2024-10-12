@@ -9,6 +9,7 @@ function BloodPressureItem({ reading, onDelete }) {
       <div className="grid grid-cols-2 gap-4">
         <p><span className="font-semibold">Person:</span> {reading.person === 'father' ? 'Father' : 'Mother'}</p>
         <p><span className="font-semibold">Date and Time:</span> {formattedDatetime}</p>
+        <p><span className="font-semibold">Time of Day:</span> {reading.timeOfDay}</p>
         <p><span className="font-semibold">Systolic:</span> {reading.systolic}</p>
         <p><span className="font-semibold">Diastolic:</span> {reading.diastolic}</p>
         <p><span className="font-semibold">Pulse:</span> {reading.pulse}</p>

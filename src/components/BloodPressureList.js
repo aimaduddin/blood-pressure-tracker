@@ -93,40 +93,40 @@ function BloodPressureList() {
   }
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-gray-800">Blood Pressure Readings</h2>
-        <div className="flex items-center space-x-2">
+    <div className="bg-white shadow-md rounded-lg p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 sm:mb-0">Blood Pressure Readings</h2>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="border rounded px-2 py-1"
+            className="border rounded px-2 py-1 w-full sm:w-auto"
             placeholder="Start Date"
           />
           <input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="border rounded px-2 py-1"
+            className="border rounded px-2 py-1 w-full sm:w-auto"
             placeholder="End Date"
           />
           <button 
             onClick={resetDateFilter}
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition duration-300"
+            className="w-full sm:w-auto px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition duration-300"
           >
             Reset Dates
           </button>
           <button 
             onClick={exportToExcel}
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
+            className="w-full sm:w-auto px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
           >
             Export to Excel
           </button>
         </div>
       </div>
       
-      <div className="mb-4 flex space-x-2">
+      <div className="mb-4 flex flex-wrap gap-2">
         <button 
           onClick={() => setFilter('all')} 
           className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}

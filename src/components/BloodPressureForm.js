@@ -134,8 +134,8 @@ function BloodPressureForm() {
   }
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">{id ? 'Edit' : 'Add'} Blood Pressure Reading</h2>
+    <div className="bg-white shadow-md rounded-lg p-4 sm:p-6">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 text-gray-800">{id ? 'Edit' : 'Add'} Blood Pressure Reading</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="person" className="block text-sm font-medium text-gray-700">Person</label>
@@ -150,27 +150,29 @@ function BloodPressureForm() {
             <option value="mother">Mother</option>
           </select>
         </div>
-        <div>
-          <label htmlFor="systolic" className="block text-sm font-medium text-gray-700">Systolic</label>
-          <input
-            type="number"
-            id="systolic"
-            value={systolic}
-            onChange={(e) => setSystolic(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="diastolic" className="block text-sm font-medium text-gray-700">Diastolic</label>
-          <input
-            type="number"
-            id="diastolic"
-            value={diastolic}
-            onChange={(e) => setDiastolic(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-            required
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="systolic" className="block text-sm font-medium text-gray-700">Systolic</label>
+            <input
+              type="number"
+              id="systolic"
+              value={systolic}
+              onChange={(e) => setSystolic(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="diastolic" className="block text-sm font-medium text-gray-700">Diastolic</label>
+            <input
+              type="number"
+              id="diastolic"
+              value={diastolic}
+              onChange={(e) => setDiastolic(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+              required
+            />
+          </div>
         </div>
         <div>
           <label htmlFor="pulse" className="block text-sm font-medium text-gray-700">Pulse</label>

@@ -18,15 +18,15 @@ function App() {
                   </Link>
                 </div>
               </div>
-              <div className="hidden md:flex items-center space-x-3">
+              <div className="flex items-center space-x-1">
                 <Link to="/" className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Home</Link>
-                <Link to="/add" className="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">Add Reading</Link>
+                <Link to="/add" className="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">Add</Link>
               </div>
             </div>
           </div>
         </nav>
 
-        <div className="max-w-6xl mx-auto mt-8 px-4">
+        <div className="max-w-6xl mx-auto mt-4 sm:mt-8 px-4">
           <Routes>
             <Route path="/" element={<BloodPressureList />} />
             <Route path="/add" element={<BloodPressureForm />} />

@@ -97,20 +97,26 @@ function BloodPressureList() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 sm:mb-0">Blood Pressure Readings</h2>
         <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="border rounded px-2 py-1 w-full sm:w-auto"
-            placeholder="Start Date"
-          />
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="border rounded px-2 py-1 w-full sm:w-auto"
-            placeholder="End Date"
-          />
+          <div className="w-full sm:w-auto">
+            <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+            <input
+              id="startDate"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="border rounded px-2 py-1 w-full"
+            />
+          </div>
+          <div className="w-full sm:w-auto">
+            <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+            <input
+              id="endDate"
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="border rounded px-2 py-1 w-full"
+            />
+          </div>
           <button 
             onClick={resetDateFilter}
             className="w-full sm:w-auto px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition duration-300"

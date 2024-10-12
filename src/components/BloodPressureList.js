@@ -6,6 +6,7 @@ import BloodPressureItem from './BloodPressureItem';
 function BloodPressureList() {
   const [readings, setReadings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all'); // 'all', 'mother', or 'father'
 
   useEffect(() => {
     fetchReadings();
@@ -36,6 +37,11 @@ function BloodPressureList() {
     }
   };
 
+  const filteredReadings = readings.filter(reading => {
+    if (filter === 'all') return true;
+    return reading.person === filter;
+  });
+
   if (loading) {
     return <div className="flex justify-center items-center h-64">
       <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-green-500"></div>
@@ -45,8 +51,30 @@ function BloodPressureList() {
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Blood Pressure Readings</h2>
+      
+      <div className="mb-4 flex space-x-2">
+        <button 
+          onClick={() => setFilter('all')} 
+          className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+        >
+          All
+        </button>
+        <button 
+          onClick={() => setFilter('mother')} 
+          className={`px-4 py-2 rounded ${filter === 'mother' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+        >
+          Mother
+        </button>
+        <button 
+          onClick={() => setFilter('father')} 
+          className={`px-4 py-2 rounded ${filter === 'father' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+        >
+          Father
+        </button>
+      </div>
+      
       <div className="space-y-4">
-        {readings.map(reading => (
+        {filteredReadings.map(reading => (
           <BloodPressureItem 
             key={reading.id} 
             reading={reading} 
@@ -54,6 +82,10 @@ function BloodPressureList() {
           />
         ))}
       </div>
+      
+      {filteredReadings.length === 0 && (
+        <p className="text-gray-500 text-center mt-4">No readings found for the selected filter.</p>
+      )}
     </div>
   );
 }

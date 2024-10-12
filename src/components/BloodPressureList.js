@@ -56,7 +56,9 @@ function BloodPressureList() {
 
   const exportToExcel = () => {
     const dataToExport = filteredReadings.map(reading => {
-      const date = new Date(reading.datetime);
+      const date = reading.datetime && typeof reading.datetime.toDate === 'function'
+        ? reading.datetime.toDate()
+        : new Date(reading.datetime);
       return {
         Date: date.toLocaleDateString(),
         Time: date.toLocaleTimeString(),

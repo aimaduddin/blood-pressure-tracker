@@ -58,8 +58,15 @@ function BloodPressureForm() {
         setSystolic(data.systolic);
         setDiastolic(data.diastolic);
         setPulse(data.pulse);
-        setDatetime(new Date(data.datetime).toISOString().slice(0, 16));
-        setTimeOfDay(data.timeOfDay || '');
+        
+        // Convert the stored datetime string to a Date object
+        const storedDate = new Date(data.datetime);
+        
+        // Format the date for the datetime-local input
+        const formattedDate = formatDateForInput(storedDate);
+        setDatetime(formattedDate);
+        
+        setTimeOfDay(data.timeOfDay);
         setRemarks(data.remarks || '');
       }
     } catch (error) {
@@ -72,12 +79,25 @@ function BloodPressureForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    
+    // Convert the input datetime to a string in a consistent format
+    const dateObject = new Date(datetime);
+    const formattedDatetime = dateObject.toLocaleString('en-US', { 
+      year: 'numeric', 
+      month: '2-digit', 
+      day: '2-digit',
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit', 
+      hour12: true 
+    });
+
     const reading = { 
       person, 
       systolic: Number(systolic), 
       diastolic: Number(diastolic), 
       pulse: Number(pulse), 
-      datetime: new Date(datetime).toISOString(),
+      datetime: formattedDatetime,
       timeOfDay,
       remarks
     };
@@ -95,6 +115,16 @@ function BloodPressureForm() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Helper function to format date for datetime-local input
+  const formatDateForInput = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
   if (loading) {

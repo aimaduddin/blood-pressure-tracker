@@ -2,7 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function BloodPressureItem({ reading, onDelete }) {
-  const formattedDatetime = new Date(reading.datetime).toLocaleString();
+  const formattedDatetime = reading.datetime && typeof reading.datetime.toDate === 'function'
+    ? reading.datetime.toDate().toLocaleString()
+    : new Date(reading.datetime).toLocaleString();
 
   return (
     <div className="bg-gray-50 rounded-lg p-4 shadow">

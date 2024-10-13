@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import BloodPressureItem from './BloodPressureItem';
+import Pagination from './Pagination';
 import * as XLSX from 'xlsx';
 
 function BloodPressureList() {
@@ -10,6 +11,8 @@ function BloodPressureList() {
   const [filter, setFilter] = useState('all');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [readingsPerPage] = useState(10);
 
   useEffect(() => {
     fetchReadings();
@@ -61,6 +64,14 @@ function BloodPressureList() {
     
     return true;
   });
+
+  // Get current readings
+  const indexOfLastReading = currentPage * readingsPerPage;
+  const indexOfFirstReading = indexOfLastReading - readingsPerPage;
+  const currentReadings = filteredReadings.slice(indexOfFirstReading, indexOfLastReading);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const exportToExcel = () => {
     const dataToExport = filteredReadings.map(reading => {
@@ -159,7 +170,7 @@ function BloodPressureList() {
       </div>
       
       <div className="space-y-4 mt-4">
-        {filteredReadings.map(reading => (
+        {currentReadings.map(reading => (
           <BloodPressureItem 
             key={reading.id} 
             reading={reading} 
@@ -168,8 +179,16 @@ function BloodPressureList() {
         ))}
       </div>
       
-      {filteredReadings.length === 0 && (
+      {filteredReadings.length === 0 ? (
         <p className="text-gray-500 text-center mt-4">No readings found for the selected filter.</p>
+      ) : (
+        <div className="mt-4">
+          <Pagination 
+            currentPage={currentPage}
+            totalPages={Math.ceil(filteredReadings.length / readingsPerPage)}
+            onPageChange={paginate}
+          />
+        </div>
       )}
     </div>
   );

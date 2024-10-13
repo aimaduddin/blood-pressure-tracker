@@ -155,6 +155,7 @@ function BloodPressureForm() {
             <label htmlFor="systolic" className="block text-sm font-medium text-gray-700">Systolic</label>
             <input
               type="number"
+              inputMode="numeric"
               id="systolic"
               value={systolic}
               onChange={(e) => setSystolic(e.target.value)}
@@ -166,6 +167,7 @@ function BloodPressureForm() {
             <label htmlFor="diastolic" className="block text-sm font-medium text-gray-700">Diastolic</label>
             <input
               type="number"
+              inputMode="numeric"
               id="diastolic"
               value={diastolic}
               onChange={(e) => setDiastolic(e.target.value)}
@@ -178,6 +180,7 @@ function BloodPressureForm() {
           <label htmlFor="pulse" className="block text-sm font-medium text-gray-700">Pulse</label>
           <input
             type="number"
+            inputMode="numeric"
             id="pulse"
             value={pulse}
             onChange={(e) => setPulse(e.target.value)}

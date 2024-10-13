@@ -23,6 +23,14 @@ function BloodPressureList() {
         id: doc.id,
         ...doc.data()
       }));
+
+      // Sort readings by datetime from latest to oldest
+      fetchedReadings.sort((a, b) => {
+        const dateA = a.datetime && typeof a.datetime.toDate === 'function' ? a.datetime.toDate() : new Date(a.datetime);
+        const dateB = b.datetime && typeof b.datetime.toDate === 'function' ? b.datetime.toDate() : new Date(b.datetime);
+        return dateB - dateA; // Sort in descending order
+      });
+
       setReadings(fetchedReadings);
     } catch (error) {
       console.error('Error fetching readings:', error);

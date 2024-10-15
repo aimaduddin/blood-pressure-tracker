@@ -211,12 +211,6 @@ function BloodPressureList() {
         onConfirm={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
       />
-
-      <div className="mt-4 flex justify-between items-center">
-        <Link to="/graphs" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300">
-          View Graphs
-        </Link>
-      </div>
     </div>
   );
 }

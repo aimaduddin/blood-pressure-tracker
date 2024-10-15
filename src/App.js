@@ -21,6 +21,7 @@ function App() {
               </div>
               <div className="flex items-center space-x-1">
                 <Link to="/" className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Home</Link>
+                <Link to="/graphs" className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-blue-500 hover:text-white transition duration-300">Graphs</Link>
                 <Link to="/add" className="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">Add</Link>
               </div>
             </div>

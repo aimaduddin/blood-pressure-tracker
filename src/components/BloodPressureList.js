@@ -4,6 +4,7 @@ import { db } from '../firebase';
 import BloodPressureItem from './BloodPressureItem';
 import Pagination from './Pagination';
 import * as XLSX from 'xlsx';
+import ConfirmationDialog from './ConfirmationDialog';
 
 function BloodPressureList() {
   const [readings, setReadings] = useState([]);
@@ -13,6 +14,7 @@ function BloodPressureList() {
   const [endDate, setEndDate] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [readingsPerPage] = useState(10);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ isOpen: false, readingId: null });
 
   useEffect(() => {
     fetchReadings();
@@ -42,13 +44,24 @@ function BloodPressureList() {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await deleteDoc(doc(db, 'bloodPressureReadings', id));
-      await fetchReadings();
-    } catch (error) {
-      console.error('Error deleting reading:', error);
+  const handleDeleteClick = (id) => {
+    setDeleteConfirmation({ isOpen: true, readingId: id });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (deleteConfirmation.readingId) {
+      try {
+        await deleteDoc(doc(db, 'bloodPressureReadings', deleteConfirmation.readingId));
+        await fetchReadings();
+      } catch (error) {
+        console.error('Error deleting reading:', error);
+      }
     }
+    setDeleteConfirmation({ isOpen: false, readingId: null });
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteConfirmation({ isOpen: false, readingId: null });
   };
 
   const filteredReadings = readings.filter(reading => {
@@ -174,7 +187,7 @@ function BloodPressureList() {
           <BloodPressureItem 
             key={reading.id} 
             reading={reading} 
-            onDelete={handleDelete} 
+            onDelete={handleDeleteClick} 
           />
         ))}
       </div>
@@ -190,6 +203,13 @@ function BloodPressureList() {
           />
         </div>
       )}
+
+      <ConfirmationDialog
+        isOpen={deleteConfirmation.isOpen}
+        message="Are you sure you want to delete this reading?"
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
     </div>
   );
 }

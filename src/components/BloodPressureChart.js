@@ -148,6 +148,7 @@ function BloodPressureChart({ readings, person }) {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false, // Allow the chart to adjust its size
     plugins: {
       legend: {
         position: 'top',
@@ -173,7 +174,11 @@ function BloodPressureChart({ readings, person }) {
         title: {
           display: true,
           text: 'Date'
-        }
+        },
+        ticks: {
+          maxRotation: 45,
+          minRotation: 45,
+        },
       },
       y: {
         beginAtZero: false,
@@ -232,25 +237,25 @@ function BloodPressureChart({ readings, person }) {
   }, [person, visibleTimeOfDay]);
 
   return (
-    <div>
+    <div className="w-full">
       <div className="mb-4">
         <h3 className="text-lg font-semibold mb-2">Date Range Filter</h3>
-        <div className="flex space-x-4">
+        <div className="flex flex-wrap gap-2">
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="border rounded px-2 py-1"
+            className="border rounded px-2 py-1 w-full sm:w-auto"
           />
           <input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="border rounded px-2 py-1"
+            className="border rounded px-2 py-1 w-full sm:w-auto"
           />
           <button
             onClick={applyFilters}
-            className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
+            className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 w-full sm:w-auto"
           >
             Apply Filter
           </button>
@@ -258,7 +263,7 @@ function BloodPressureChart({ readings, person }) {
       </div>
       <div className="mb-4 text-center">
         <h3 className="text-lg font-semibold mb-2">Blood Pressure Statistics</h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <h4 className="font-medium">Highest Values</h4>
             <p className="text-md">
@@ -282,26 +287,11 @@ function BloodPressureChart({ readings, person }) {
           </div>
         </div>
       </div>
-      <div ref={chartRef}>
+      <div ref={chartRef} className="h-[50vh] md:h-[60vh]">
         <Line options={options} data={data} />
       </div>
-      <div ref={legendRef} className="mt-4 flex justify-center space-x-4">
-        {Object.entries(visibleTimeOfDay).map(([timeOfDay, isVisible]) => (
-          <div 
-            key={timeOfDay}
-            className={`flex items-center cursor-pointer ${isVisible ? 'opacity-100' : 'opacity-50'}`}
-            onClick={() => toggleTimeOfDay(timeOfDay)}
-          >
-            <div 
-              className={`w-4 h-4 rounded-full mr-2`}
-              style={{ backgroundColor: getTimeOfDayColor(timeOfDay) }}
-            ></div>
-            <span>{timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)} {getTimeOfDaySymbol(timeOfDay)}</span>
-          </div>
-        ))}
-      </div>
-      <div className="mt-4 flex justify-between items-center">
-        <div className="flex space-x-4">
+      <div className="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="flex flex-wrap justify-center gap-2">
           {Object.entries(visibleTimeOfDay).map(([timeOfDay, isVisible]) => (
             <div 
               key={timeOfDay}
@@ -318,7 +308,7 @@ function BloodPressureChart({ readings, person }) {
         </div>
         <button 
           onClick={exportToPDF}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 w-full sm:w-auto"
         >
           Export to PDF
         </button>

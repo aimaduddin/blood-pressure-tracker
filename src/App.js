@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import BloodPressureList from './components/BloodPressureList';
 import BloodPressureForm from './components/BloodPressureForm';
+import BloodPressureGraphs from './components/BloodPressureGraphs';
 import './App.css';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/" element={<BloodPressureList />} />
             <Route path="/add" element={<BloodPressureForm />} />
             <Route path="/edit/:id" element={<BloodPressureForm />} />
+            <Route path="/graphs" element={<BloodPressureGraphs />} />
           </Routes>
         </div>
       </div>

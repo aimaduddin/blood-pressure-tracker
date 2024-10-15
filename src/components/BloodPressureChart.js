@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -10,6 +10,8 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 ChartJS.register(
   CategoryScale,
@@ -134,6 +136,30 @@ function BloodPressureChart({ readings, person }) {
     }));
   }, []);
 
+  const chartContainerRef = useRef(null);
+
+  const exportToPDF = useCallback(() => {
+    if (chartContainerRef.current) {
+      html2canvas(chartContainerRef.current).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+          orientation: 'landscape',
+          unit: 'mm',
+          format: 'a4'
+        });
+        
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = pdfWidth - 20; // 10mm margin on each side
+        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+        
+        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+        pdf.save(`${person}_blood_pressure_chart.pdf`);
+      });
+    }
+  }, [person]);
+
   return (
     <div>
       <div className="mb-4 text-center">
@@ -155,21 +181,45 @@ function BloodPressureChart({ readings, person }) {
           </div>
         </div>
       </div>
-      <Line options={options} data={data} />
-      <div className="mt-4 flex justify-center space-x-4">
-        {Object.entries(visibleTimeOfDay).map(([timeOfDay, isVisible]) => (
-          <div 
-            key={timeOfDay}
-            className={`flex items-center cursor-pointer ${isVisible ? 'opacity-100' : 'opacity-50'}`}
-            onClick={() => toggleTimeOfDay(timeOfDay)}
-          >
+      <div ref={chartContainerRef}>
+        <Line options={options} data={data} />
+        <div className="mt-4 flex justify-center space-x-4 mb-4">
+          {Object.entries(visibleTimeOfDay).map(([timeOfDay, isVisible]) => (
             <div 
-              className={`w-4 h-4 rounded-full mr-2`}
-              style={{ backgroundColor: getTimeOfDayColor(timeOfDay) }}
-            ></div>
-            <span>{timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)} {getTimeOfDaySymbol(timeOfDay)}</span>
-          </div>
-        ))}
+              key={timeOfDay}
+              className={`flex items-center ${isVisible ? 'opacity-100' : 'opacity-50'}`}
+            >
+              <div 
+                className={`w-4 h-4 rounded-full mr-2`}
+                style={{ backgroundColor: getTimeOfDayColor(timeOfDay) }}
+              ></div>
+              <span>{timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)} {getTimeOfDaySymbol(timeOfDay)}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="mt-4 flex justify-between items-center">
+        <div className="flex space-x-4">
+          {Object.entries(visibleTimeOfDay).map(([timeOfDay, isVisible]) => (
+            <div 
+              key={timeOfDay}
+              className={`flex items-center cursor-pointer ${isVisible ? 'opacity-100' : 'opacity-50'}`}
+              onClick={() => toggleTimeOfDay(timeOfDay)}
+            >
+              <div 
+                className={`w-4 h-4 rounded-full mr-2`}
+                style={{ backgroundColor: getTimeOfDayColor(timeOfDay) }}
+              ></div>
+              <span>{timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)} {getTimeOfDaySymbol(timeOfDay)}</span>
+            </div>
+          ))}
+        </div>
+        <button 
+          onClick={exportToPDF}
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
+        >
+          Export to PDF
+        </button>
       </div>
     </div>
   );

@@ -194,43 +194,53 @@ function BloodPressureChart({ readings, person }) {
 
   const exportToPDF = useCallback(() => {
     if (chartRef.current) {
-      html2canvas(chartRef.current).then((canvas) => {
+      const chartContainer = chartRef.current;
+
+      html2canvas(chartContainer, {
+        scale: 2,
+        logging: false,
+        useCORS: true
+      }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF({
           orientation: 'landscape',
           unit: 'mm',
           format: 'a4'
         });
-        
+
         const pageWidth = pdf.internal.pageSize.getWidth();
         const pageHeight = pdf.internal.pageSize.getHeight();
+        const margin = 10;
+
+        const imgWidth = pageWidth - (2 * margin);
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+
+        // Add custom legend with correct colors
+        pdf.setFontSize(10);
+        pdf.setTextColor(0, 0, 0);
+        const legendY = pageHeight - margin - 10;
+        pdf.text('Time of Day:', margin, legendY);
         
-        // Add chart
-        const imgProps = pdf.getImageProperties(imgData);
-        const imgWidth = pageWidth - 20; // 10mm margin on each side
-        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-        
-        // Add custom legend
-        const legendY = imgHeight + 20; // 10mm below the chart
-        const legendItemWidth = 40;
-        const legendItemHeight = 10;
-        const legendGap = 5;
-        let legendX = 10;
-        
-        pdf.setFontSize(12);
-        pdf.text('Time of Day:', legendX, legendY);
-        legendX += 30;
-        
+        let legendX = margin + 30;
+        const timeOfDayColors = {
+          morning: [255, 206, 86],
+          noon: [255, 159, 64],
+          afternoon: [75, 192, 192],
+          night: [153, 102, 255]
+        };
+
         Object.entries(visibleTimeOfDay).forEach(([timeOfDay, isVisible]) => {
           if (isVisible) {
-            pdf.setFillColor(getTimeOfDayColor(timeOfDay));
-            pdf.rect(legendX, legendY - 7, 7, 7, 'F');
-            pdf.text(timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1), legendX + 10, legendY);
-            legendX += legendItemWidth + legendGap;
+            const color = timeOfDayColors[timeOfDay.toLowerCase()] || [201, 203, 207];
+            pdf.setFillColor(color[0], color[1], color[2]);
+            pdf.rect(legendX, legendY - 3, 5, 5, 'F');
+            pdf.text(timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1), legendX + 7, legendY);
+            legendX += 40;
           }
         });
-        
+
         pdf.save(`${person}_blood_pressure_chart.pdf`);
       });
     }

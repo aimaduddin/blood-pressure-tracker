@@ -79,13 +79,20 @@ function BloodPressureList() {
     return true;
   });
 
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredReadings.length / readingsPerPage);
+
   // Get current readings
   const indexOfLastReading = currentPage * readingsPerPage;
   const indexOfFirstReading = indexOfLastReading - readingsPerPage;
   const currentReadings = filteredReadings.slice(indexOfFirstReading, indexOfLastReading);
 
   // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
 
   const exportToExcel = () => {
     const dataToExport = filteredReadings.map(reading => {
@@ -199,7 +206,7 @@ function BloodPressureList() {
         <div className="mt-4">
           <Pagination 
             currentPage={currentPage}
-            totalPages={Math.ceil(filteredReadings.length / readingsPerPage)}
+            totalPages={totalPages}
             onPageChange={paginate}
           />
         </div>
